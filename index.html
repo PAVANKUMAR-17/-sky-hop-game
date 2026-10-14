@@ -19,7 +19,30 @@ function gameOver(){if(mode!=='playing')return;mode='over';shake=8;chirp(160,.25
 function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
 function sky(){let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#8bdbe9');g.addColorStop(.72,'#b7edf0');g.addColorStop(1,'#e3f5c9');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle='#fff8d7';ctx.beginPath();ctx.arc(370,100,35,0,7);ctx.fill();ctx.fillStyle='#fffde7';ctx.beginPath();ctx.arc(359,90,19,0,7);ctx.fill();for(let i=0;i<4;i++){let x=((i*151-frame*.28)%(W+140)+W+140)%(W+140)-55,y=92+i%3*75;ctx.fillStyle='#fff9e9a8';ctx.beginPath();ctx.ellipse(x,y,28,10,0,0,7);ctx.ellipse(x+20,y-7,23,15,0,0,7);ctx.ellipse(x+43,y,29,10,0,0,7);ctx.fill()}ctx.fillStyle='#80d1ae';ctx.beginPath();ctx.moveTo(0,H-ground-58);for(let x=0;x<=W;x+=8)ctx.lineTo(x,H-ground-45+Math.sin((x+frame*.5)/57)*18+Math.sin(x/29)*8);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();ctx.fillStyle='#59bd9a';ctx.beginPath();ctx.moveTo(0,H-ground-27);for(let x=0;x<=W;x+=8)ctx.lineTo(x,H-ground-10+Math.sin((x-frame*.6)/43)*14+Math.sin(x/22)*7);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill()}
 function pipe(p){const w=65;ctx.fillStyle='#218c68';rr(p.x+5,0,w-10,p.top-8,7);ctx.fillStyle='#55ce87';ctx.fillRect(p.x+12,0,10,p.top-8);ctx.fillStyle='#279d70';rr(p.x,p.top-17,w,25,7);ctx.fillStyle='#54d28d';ctx.fillRect(p.x+9,p.top-14,10,21);let by=p.top+p.gap;ctx.fillStyle='#218c68';rr(p.x,by,w,H-ground-by,7);ctx.fillStyle='#55ce87';ctx.fillRect(p.x+12,by+2,10,H-ground-by-2);ctx.fillStyle='#279d70';rr(p.x-5,by-2,w+10,25,7);ctx.fillStyle='#54d28d';ctx.fillRect(p.x+5,by+2,10,17)}
-function drawBird(){ctx.save();ctx.translate(bird.x,bird.y);ctx.rotate(bird.rot);ctx.fillStyle='#17344a';ctx.beginPath();ctx.ellipse(0,1,21,17,0,0,7);ctx.fill();ctx.fillStyle='#ffca4c';ctx.beginPath();ctx.ellipse(-1,-2,18,14,0,0,7);ctx.fill();ctx.fillStyle='#fff9e8';ctx.beginPath();ctx.ellipse(9,-7,8,9,0,0,7);ctx.fill();ctx.fillStyle='#18344a';ctx.beginPath();ctx.arc(12,-7,3.2,0,7);ctx.fill();ctx.fillStyle='#ff8065';ctx.beginPath();ctx.moveTo(15,1);ctx.lineTo(29,5);ctx.lineTo(15,9);ctx.closePath();ctx.fill();ctx.strokeStyle='#17344a';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(-7,4,9,5,Math.sin(frame*.3)*.3,0,7);ctx.stroke();ctx.restore()}
+function drawBird(){
+  if(!bird) return;
+  ctx.save();
+  ctx.globalAlpha=1;
+  ctx.translate(bird.x,bird.y);
+  ctx.rotate(bird.rot||0);
+  // Dark outline makes the player visible against every sky color.
+  ctx.fillStyle='#17344a';
+  ctx.beginPath();ctx.ellipse(0,0,23,19,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#ffca4c';
+  ctx.beginPath();ctx.ellipse(-1,-2,19,15,0,0,Math.PI*2);ctx.fill();
+  // Wing
+  ctx.fillStyle='#f3a928';
+  ctx.beginPath();ctx.ellipse(-7,5,9,6,Math.sin(frame*.3)*.22,0,Math.PI*2);ctx.fill();
+  // Eye
+  ctx.fillStyle='#fff9e8';
+  ctx.beginPath();ctx.arc(10,-8,7,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#17344a';
+  ctx.beginPath();ctx.arc(12,-8,3,0,Math.PI*2);ctx.fill();
+  // Beak
+  ctx.fillStyle='#ff8065';
+  ctx.beginPath();ctx.moveTo(16,0);ctx.lineTo(30,5);ctx.lineTo(16,10);ctx.closePath();ctx.fill();
+  ctx.restore();
+}
 function floor(){ctx.fillStyle='#f2d17a';ctx.fillRect(0,H-ground,W,ground);ctx.fillStyle='#b5dc79';ctx.fillRect(0,H-ground,W,12);for(let x=-((frame*2)%30);x<W;x+=30){ctx.fillStyle='#d9b35d';ctx.beginPath();ctx.moveTo(x,H-ground+12);ctx.lineTo(x+13,H-ground+12);ctx.lineTo(x+3,H-ground+19);ctx.closePath();ctx.fill()}ctx.fillStyle='#a57b46';ctx.fillRect(0,H-8,W,8)}
 function draw(){ctx.save();if(shake>0){ctx.translate(rand(-shake,shake),rand(-shake,shake));shake*=.75;if(shake<.4)shake=0}sky();pipes.forEach(pipe);particles.forEach(p=>{ctx.globalAlpha=p.life;ctx.fillStyle='#fff9e8';ctx.beginPath();ctx.arc(p.x,p.y,p.r*p.life,0,7);ctx.fill()});ctx.globalAlpha=1;floor();drawBird();ctx.restore()}
 function loop(now){raf=0;if(mode!=='playing'){draw();return}const dt=Math.min((now-last)/16.67,2)||1;last=now;frame+=dt;bird.vy=Math.min(bird.vy+.31*dt,7.5);bird.y+=bird.vy*dt;bird.rot=Math.max(-.55,Math.min(.95,bird.vy*.09));pipes.forEach(p=>{p.x-=2.7*dt;if(!p.passed&&p.x+65<bird.x){p.passed=true;score++;$('score').textContent=score;$('passed').textContent=score;chirp(820,.06);if(score>best)$('best').textContent=score}});if(pipes[0].x<-80){pipes.shift();pipes.push(makePipe(pipes[pipes.length-1].x+210))}particles=particles.filter(p=>p.life>0);particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=.035*dt});let hit=bird.y-14<0||bird.y+14>H-ground;for(const p of pipes){if(bird.x+15>p.x-3&&bird.x-15<p.x+65&&(bird.y-12<p.top||bird.y+12>p.top+p.gap)){hit=true;break}}if(hit)gameOver();draw();if(mode==='playing')raf=requestAnimationFrame(loop)}
