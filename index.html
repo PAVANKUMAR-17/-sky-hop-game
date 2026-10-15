@@ -2,22 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Sky Hop">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
   <meta name="theme-color" content="#8bdbe9">
   <title>Sky Hop — Flappy Bird</title>
   <style>
     :root{--ink:#17344a;--paper:#fff9e9;--coral:#ed8063;--sun:#ffd85d}
     *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink)}
-    body{min-height:100svh;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 8%,#f8ffdd 0,transparent 38%),linear-gradient(140deg,#82d8e9,#a5e9dc 54%,#f8e9b3)}
+    html,body{margin:0;min-height:100%;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;overscroll-behavior:none}
+    html{min-height:100%;background:#8bdbe9}
+    body{-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+    body{min-height:100svh;min-height:100dvh;display:grid;place-items:center;overflow-x:hidden;overflow-y:auto;background:radial-gradient(ellipse at 50% 8%,#f8ffdd 0,transparent 38%),linear-gradient(140deg,#82d8e9,#a5e9dc 54%,#f8e9b3)}
     button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
     .page{width:min(100%,520px);padding:14px}
     .top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 4px 11px}
     .brand{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:1000;letter-spacing:-.06em;white-space:nowrap}
     .bird-logo{display:grid;place-items:center;width:38px;height:38px;border:2px solid var(--ink);border-radius:13px;background:var(--paper);box-shadow:3px 3px 0 var(--ink);font-size:22px;transform:rotate(-5deg)}
     .tag{padding:8px 11px;border:1px solid #ffffff;border-radius:99px;background:#fff9e9b8;font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
-    .frame{position:relative;overflow:hidden;border:3px solid var(--ink);border-radius:25px;background:#91e1ec;box-shadow:0 10px 0 #15334b24,0 23px 55px #1b55662b;isolation:isolate}
-    canvas{display:block;width:100%;height:auto;aspect-ratio:4/5;touch-action:manipulation}
+    .frame{position:relative;overflow:hidden;touch-action:none;border:3px solid var(--ink);border-radius:25px;background:#91e1ec;box-shadow:0 10px 0 #15334b24,0 23px 55px #1b55662b;isolation:isolate}
+    canvas{display:block;width:100%;height:auto;aspect-ratio:4/5;touch-action:none;user-select:none;-webkit-user-select:none}
     .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(#fff3,transparent 60%,#143d5210);pointer-events:none}
     .panel{width:min(100%,325px);padding:22px 21px 19px;border:2px solid var(--ink);border-radius:24px;background:#fff9e9f2;box-shadow:7px 7px 0 var(--ink);text-align:center;pointer-events:auto;backdrop-filter:blur(5px);animation:pop .32s cubic-bezier(.2,1.4,.4,1)}
     @keyframes pop{from{transform:scale(.84) translateY(8px);opacity:0}to{transform:scale(1);opacity:1}}
@@ -39,7 +48,25 @@
     .hint{text-align:center;color:#28536a;font-size:11px;font-weight:800;opacity:.9}
     .hidden{display:none!important}
     .sound{display:grid;place-items:center;width:37px;height:37px;flex:0 0 37px;border:1px solid white;border-radius:13px;background:#fff9e9b8;font-size:17px}
-    @media(max-height:720px){.page{width:min(100%,420px);padding:6px}.top{margin-bottom:6px}.brand{font-size:18px}.bird-logo{width:32px;height:32px;font-size:18px}.frame{border-radius:19px}.stats{margin:7px 0}.stat{padding:6px 4px}.stat strong{font-size:16px}.hint{font-size:9px}.panel{padding:15px}h1{font-size:33px}.desc{margin-bottom:11px}.primary{min-height:43px}}
+    @media(max-height:720px){.page{width:min(100%,420px);padding:6px 10px max(8px,env(safe-area-inset-bottom))}.top{margin-bottom:6px}.brand{font-size:18px}.bird-logo{width:32px;height:32px;font-size:18px}.frame{border-radius:19px}.stats{margin:7px 0}.stat{padding:6px 4px}.stat strong{font-size:16px}.hint{font-size:9px}.panel{padding:15px}h1{font-size:33px}.desc{margin-bottom:11px}.primary{min-height:43px}}
+    @media (max-width:360px){
+      .page{padding-left:9px;padding-right:9px}
+      .top{gap:6px}.brand{gap:7px;font-size:18px}.tag{font-size:9px;padding:7px 8px}
+      .bird-logo{width:32px;height:32px;font-size:18px}
+      .pill{min-width:72px;padding:6px 10px}.pill strong{font-size:22px}
+      .panel{padding:17px 15px 15px}.desc{font-size:12px}
+    }
+    @media (orientation:landscape) and (max-height:520px){
+      body{place-items:start center}
+      .page{width:min(100%,720px);padding:6px 12px;display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,.72fr);grid-template-rows:auto 1fr auto;column-gap:14px;align-items:center}
+      .top{grid-column:1/-1;margin:0 4px 6px}
+      .frame{grid-column:1;grid-row:2/4;width:auto;max-width:calc((100svh - 70px)*.8);justify-self:center}
+      .stats{grid-column:2;grid-row:2;display:grid;grid-template-columns:1fr;gap:6px;margin:0 0 8px;width:100%}
+      .stat{padding:5px}.stat strong{font-size:15px}
+      .hint{grid-column:2;grid-row:3;font-size:10px;align-self:start}
+      .panel{padding:15px}.panel h1{font-size:30px;margin:9px 0}.desc{margin-bottom:9px;font-size:11px}.primary{min-height:40px}
+    }
+    @media (prefers-reduced-motion:reduce){.panel{animation:none}*{scroll-behavior:auto!important}}
   </style>
 </head>
 <body>
@@ -81,8 +108,14 @@
 
     const canvas = document.getElementById('game');
     const ctx = canvas.getContext('2d');
-    const W = canvas.width;
-    const H = canvas.height;
+    // Keep game physics in a fixed logical coordinate system while drawing at
+    // device-pixel resolution so the canvas stays sharp on modern phone screens.
+    const W = 480;
+    const H = 600;
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(W * pixelRatio);
+    canvas.height = Math.round(H * pixelRatio);
+    ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     const GROUND_H = 64;
     const PIPE_W = 68;
     const PIPE_GAP_MIN = 158;
@@ -443,6 +476,18 @@
       ui.soundBtn.setAttribute('aria-label', soundEnabled ? 'Mute sound' : 'Enable sound');
       if (soundEnabled) playTone(600, 0.06);
     });
+
+    // Browsers pause animation callbacks in background tabs. Reset the time
+    // baseline when returning so the first resumed frame never jumps.
+    document.addEventListener('visibilitychange', () => { lastTimestamp = 0; });
+
+    // Register the service worker only when served from HTTPS or localhost.
+    // The game remains playable if service workers are unavailable.
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
 
     resetGame();
     startAnimation();
