@@ -1,51 +1,452 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#8bdbe9"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Sky Hop"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png" type="image/png"><link rel="apple-touch-icon" href="icons/icon-192.png">
-<title>Sky Hop — Flappy Bird</title>
-<style>
-:root{--ink:#15334b;--cream:#fff9e9;--mint:#b6efb5;--coral:#ff896d;--yellow:#ffd85d}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink)}body{display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 8%,#f8ffdd 0,transparent 37%),linear-gradient(140deg,#82d8e9,#a5e9dc 54%,#f8e9b3)}button{font:inherit;cursor:pointer;border:0;-webkit-tap-highlight-color:transparent}.controls{display:flex;gap:6px}.sound:focus-visible,.primary:focus-visible{outline:3px solid #ed8063;outline-offset:3px}.page{width:min(100%,520px);padding:15px}.top{display:flex;align-items:center;justify-content:space-between;margin:0 4px 11px}.brand{display:flex;align-items:center;gap:10px;font-weight:1000;letter-spacing:-.06em;font-size:22px}.birdicon{display:grid;place-items:center;width:38px;height:38px;background:var(--cream);border:2px solid var(--ink);border-radius:13px;box-shadow:3px 3px 0 var(--ink);font-size:22px;transform:rotate(-5deg)}.tag{font-size:10px;font-weight:950;letter-spacing:.12em;text-transform:uppercase;background:#fff9e9b5;border:1px solid white;border-radius:99px;padding:8px 12px}.sound{display:grid;place-items:center;width:37px;height:37px;border-radius:13px;border:1px solid white;background:#fff9e9b5;font-size:17px}.frame{position:relative;border:3px solid var(--ink);border-radius:25px;overflow:hidden;box-shadow:0 12px 0 #15334b25,0 24px 60px #1b55662a;background:#91e1ec}canvas{display:block;width:100%;height:auto;aspect-ratio:4/5;touch-action:manipulation}#birdSprite{position:absolute;z-index:2;left:0;top:0;display:none;transform:translate(-50%,-50%);font-size:clamp(27px,7vw,39px);line-height:1;filter:drop-shadow(2px 3px 0 #17344a);pointer-events:none;will-change:left,top} .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:22px;background:linear-gradient(#fff3,transparent 60%,#143d5210);pointer-events:none}.panel{pointer-events:auto;text-align:center;width:min(100%,325px);padding:23px 21px 20px;border:2px solid var(--ink);border-radius:24px;background:#fff9e9f2;box-shadow:7px 7px 0 var(--ink);backdrop-filter:blur(5px);animation:pop .32s cubic-bezier(.2,1.4,.4,1)}@keyframes pop{from{transform:scale(.84) translateY(8px);opacity:0}to{transform:scale(1);opacity:1}}.eyebrow{display:inline-block;color:white;background:#ed8063;border-radius:100px;padding:6px 11px;font-size:10px;font-weight:950;letter-spacing:.13em;text-transform:uppercase}h1{font-size:clamp(32px,8vw,43px);line-height:.98;letter-spacing:-.07em;margin:13px 0 10px;font-weight:1000}h1 span{color:#e77459}.desc{font-size:13px;line-height:1.5;color:#456174;font-weight:650;margin:0 auto 18px;max-width:255px}.primary{display:flex;justify-content:center;align-items:center;gap:9px;width:100%;min-height:50px;border:2px solid var(--ink);border-radius:15px;background:var(--yellow);box-shadow:0 5px 0 var(--ink);font-weight:950;font-size:15px;transition:transform .12s,box-shadow .12s}.primary:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}.sub{margin-top:14px;font-size:10px;font-weight:900;color:#587284}.stats{display:flex;gap:9px;margin:12px 0}.stat{flex:1;text-align:center;background:#fff9e9ad;border:1.5px solid #fff;border-radius:15px;padding:9px}.stat small{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.12em;font-weight:950;color:#557082}.stat strong{display:block;font-size:20px;line-height:1.2;font-weight:1000;letter-spacing:-.04em}.hint{text-align:center;font-size:11px;font-weight:800;color:#28536a;opacity:.85}.hint kbd{display:inline-block;background:var(--cream);border:1px solid #abcfd0;border-radius:6px;padding:2px 6px;box-shadow:0 2px 0 #abcfd0;font-size:10px;margin:0 2px}.hud{position:absolute;top:14px;left:0;right:0;display:flex;justify-content:center;gap:8px;pointer-events:none}.pill{border:2px solid var(--ink);border-radius:13px;padding:7px 17px;text-align:center;min-width:83px;background:#fff9e9e8;box-shadow:3px 3px 0 #15334b50}.pill small{display:block;text-transform:uppercase;letter-spacing:.12em;font-size:9px;font-weight:950;color:#597383}.pill strong{font-size:25px;line-height:1.05;font-weight:1000}.hidden{display:none!important}@media(max-height:700px){.page{width:min(100%,420px);padding:7px}.top{margin-bottom:5px}.brand{font-size:18px}.birdicon{width:32px;height:32px;font-size:18px}.frame{border-radius:19px}.stats{margin:7px 0}.stat{padding:6px}.stat strong{font-size:17px}.hint{font-size:9px}.panel{padding:15px}h1{font-size:33px}.desc{margin-bottom:11px}.primary{min-height:43px}}
-</style></head>
-<body><main class="page"><header class="top"><div class="brand"><span class="birdicon">🐤</span><span>SKY HOP<span style="color:#ed8063">.</span></span></div><span class="tag">✦ One more try</span><div class="controls"><button id="soundBtn" class="sound" aria-label="Toggle sound" title="Toggle sound">🔊</button><button id="vibeBtn" class="sound" aria-label="Toggle vibration" title="Toggle vibration">📳</button><button id="fullBtn" class="sound" aria-label="Toggle full screen" title="Toggle full screen">⛶</button></div></header>
-<section class="frame" aria-label="Flappy Bird game"><canvas id="game" width="480" height="600" aria-label="Tap, click, or press Space to fly through pipes"></canvas><div id="birdSprite" aria-hidden="true">🐤</div><div id="hud" class="hud hidden"><div class="pill"><small>Score</small><strong id="score">0</strong></div><div class="pill"><small>Best</small><strong id="best">0</strong></div></div>
-<div id="overlay" class="overlay"><div class="panel"><span class="eyebrow" id="eyebrow">✦ The sky is yours</span><h1 id="title">Ready,<br><span>birdie?</span></h1><p id="desc" class="desc">A little flap, a little luck. Weave through the pipes and see how far you can fly.</p><button id="playBtn" class="primary"><span>▶</span><span id="playText">Let's fly</span></button><div id="sub" class="sub">TAP · CLICK · SPACE TO FLAP</div></div></div></section>
-<div class="stats"><div class="stat"><small>Personal best</small><strong id="bestStat">0 🏆</strong></div><div class="stat"><small>Flight status</small><strong id="status">Ready ✨</strong></div><div class="stat"><small>Pipe passed</small><strong id="passed">0</strong></div></div><div class="hint">Press <kbd>SPACE</kbd> or <kbd>↑</kbd> to flap · Tap anywhere to fly</div></main>
-<script>
-(()=>{const c=document.getElementById('game'),ctx=c.getContext('2d'),W=c.width,H=c.height,ground=64,$=id=>document.getElementById(id);let mode='ready',bird,pipes,score,frame=0,last=0,raf=0,sound=true,vibration=true,audio=null,particles=[],shake=0,best=0;try{best=+(localStorage.getItem('skyhop-best')||0)}catch{}$('best').textContent=$('bestStat').textContent=best;const rand=(a,b)=>a+Math.random()*(b-a);
-function chirp(freq=550,dur=.07,type='sine'){if(!sound)return;try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();const o=audio.createOscillator(),g=audio.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(.06,audio.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+dur);o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+dur)}catch{}}
-function level(){return Math.floor(score/50)+1}function reset(){bird={x:125,y:260,vy:0,rot:0};pipes=[];score=0;frame=0;particles=[];shake=0;for(let i=0;i<3;i++)pipes.push(makePipe(380+i*210));$('score').textContent='0';$('status').textContent='Level 1 ✨'}function makePipe(x){const lv=level(),gap=rand(Math.max(118,190-(lv-1)*5),Math.max(132,210-(lv-1)*5)),top=rand(80,H-ground-gap-75);return{x,top,gap,passed:false}}
-function start(){if(raf)cancelAnimationFrame(raf);raf=0;reset();mode='playing';$('overlay').classList.add('hidden');$('hud').classList.remove('hidden');$('status').textContent='Flying 🪽';flap();last=performance.now();raf=requestAnimationFrame(loop)}function flap(){if(mode!=='playing')return;bird.vy=-5.7;chirp(640,.075);if(vibration&&navigator.vibrate)navigator.vibrate(12);for(let i=0;i<5;i++)particles.push({x:bird.x-10,y:bird.y+rand(-5,8),vx:rand(-2,-.5),vy:rand(-1.4,1.4),life:1,r:rand(2,4)})}
-function gameOver(){if(mode!=='playing')return;mode='over';shake=8;chirp(160,.25,'triangle');if(vibration&&navigator.vibrate)navigator.vibrate([45,35,70]);$('hud').classList.add('hidden');$('status').textContent='Landed 💫';const record=score>best;if(record){best=score;try{localStorage.setItem('skyhop-best',best)}catch{}}$('best').textContent=$('bestStat').textContent=best;$('eyebrow').textContent=record&&score>0?'✦ New personal best':'✦ Flight complete';$('title').innerHTML=score>=10?'Sky<br><span>legend!</span>':score>0?'Nice<br><span>flying!</span>':'Oop—<br><span>bonk!</span>';$('desc').textContent=score>=10?'You’re on a roll! The sky looks good on you. Ready to beat that score?':score>0?'You flew past '+score+' pipe'+(score===1?'':'s')+'. Fancy another little adventure?':'Every great flyer starts somewhere. Give it another go!';$('playText').textContent='Fly again';$('sub').textContent='YOUR SCORE: '+score+' · BEST: '+best;$('overlay').classList.remove('hidden');$('passed').textContent=score}
-function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
-function sky(){let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#8bdbe9');g.addColorStop(.72,'#b7edf0');g.addColorStop(1,'#e3f5c9');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle='#fff8d7';ctx.beginPath();ctx.arc(370,100,35,0,7);ctx.fill();ctx.fillStyle='#fffde7';ctx.beginPath();ctx.arc(359,90,19,0,7);ctx.fill();for(let i=0;i<4;i++){let x=((i*151-frame*.28)%(W+140)+W+140)%(W+140)-55,y=92+i%3*75;ctx.fillStyle='#fff9e9a8';ctx.beginPath();ctx.ellipse(x,y,28,10,0,0,7);ctx.ellipse(x+20,y-7,23,15,0,0,7);ctx.ellipse(x+43,y,29,10,0,0,7);ctx.fill()}ctx.fillStyle='#80d1ae';ctx.beginPath();ctx.moveTo(0,H-ground-58);for(let x=0;x<=W;x+=8)ctx.lineTo(x,H-ground-45+Math.sin((x+frame*.5)/57)*18+Math.sin(x/29)*8);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();ctx.fillStyle='#59bd9a';ctx.beginPath();ctx.moveTo(0,H-ground-27);for(let x=0;x<=W;x+=8)ctx.lineTo(x,H-ground-10+Math.sin((x-frame*.6)/43)*14+Math.sin(x/22)*7);ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill()}
-function pipe(p){const w=65,lv=level();let dark='#218c68',light='#55ce87',cap='#279d70',shine='#54d28d';if(lv===2){dark='#3658a8';light='#8bd5ff';cap='#5078d8';shine='#b4e8ff'}else if(lv>=3){dark='#a96a12';light='#ffe27a';cap='#d89a24';shine='#fff0a8'}ctx.fillStyle=dark;rr(p.x+5,0,w-10,p.top-8,7);ctx.fillStyle=light;ctx.fillRect(p.x+12,0,10,p.top-8);ctx.fillStyle=cap;rr(p.x,p.top-17,w,25,7);ctx.fillStyle=shine;ctx.fillRect(p.x+9,p.top-14,10,21);let by=p.top+p.gap;ctx.fillStyle=dark;rr(p.x,by,w,H-ground-by,7);ctx.fillStyle=light;ctx.fillRect(p.x+12,by+2,10,H-ground-by-2);ctx.fillStyle=cap;rr(p.x-5,by-2,w+10,25,7);ctx.fillStyle=shine;ctx.fillRect(p.x+5,by+2,10,17);if(lv>=3){ctx.save();ctx.globalAlpha=.28;ctx.fillStyle='#fff8c9';ctx.fillRect(p.x+27,0,5,p.top-18);ctx.fillRect(p.x+27,by+25,5,H-ground-by-25);ctx.restore()}}
-function drawBird(){
-  if(!bird) return;
-  ctx.save();
-  ctx.globalAlpha=1;
-  ctx.translate(bird.x,bird.y);
-  ctx.rotate(bird.rot||0);
-  // Dark outline makes the player visible against every sky color.
-  ctx.fillStyle='#17344a';
-  ctx.beginPath();ctx.ellipse(0,0,23,19,0,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#ffca4c';
-  ctx.beginPath();ctx.ellipse(-1,-2,19,15,0,0,Math.PI*2);ctx.fill();
-  // Wing
-  ctx.fillStyle='#f3a928';
-  ctx.beginPath();ctx.ellipse(-7,5,9,6,Math.sin(frame*.3)*.22,0,Math.PI*2);ctx.fill();
-  // Eye
-  ctx.fillStyle='#fff9e8';
-  ctx.beginPath();ctx.arc(10,-8,7,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#17344a';
-  ctx.beginPath();ctx.arc(12,-8,3,0,Math.PI*2);ctx.fill();
-  // Beak
-  ctx.fillStyle='#ff8065';
-  ctx.beginPath();ctx.moveTo(16,0);ctx.lineTo(30,5);ctx.lineTo(16,10);ctx.closePath();ctx.fill();
-  ctx.restore();
-}
-function floor(){ctx.fillStyle='#f2d17a';ctx.fillRect(0,H-ground,W,ground);ctx.fillStyle='#b5dc79';ctx.fillRect(0,H-ground,W,12);for(let x=-((frame*2)%30);x<W;x+=30){ctx.fillStyle='#d9b35d';ctx.beginPath();ctx.moveTo(x,H-ground+12);ctx.lineTo(x+13,H-ground+12);ctx.lineTo(x+3,H-ground+19);ctx.closePath();ctx.fill()}ctx.fillStyle='#a57b46';ctx.fillRect(0,H-8,W,8)}
-function syncBirdSprite(){const el=$('birdSprite');if(!bird||!c.clientWidth||!c.clientHeight){el.style.display='none';return}el.style.display='block';el.style.left=(c.offsetLeft+bird.x*(c.clientWidth/W))+'px';el.style.top=(c.offsetTop+bird.y*(c.clientHeight/H))+'px';el.style.transform='translate(-50%,-50%) rotate('+(bird.rot||0)+'rad)'}
-function draw(){ctx.save();if(shake>0){ctx.translate(rand(-shake,shake),rand(-shake,shake));shake*=.75;if(shake<.4)shake=0}sky();pipes.forEach(pipe);particles.forEach(p=>{ctx.globalAlpha=p.life;ctx.fillStyle='#fff9e8';ctx.beginPath();ctx.arc(p.x,p.y,p.r*p.life,0,7);ctx.fill()});ctx.globalAlpha=1;floor();drawBird();ctx.restore();syncBirdSprite()}
-function loop(now){raf=0;if(mode!=='playing'){draw();return}const dt=Math.min((now-last)/16.67,2)||1;last=now;frame+=dt;bird.vy=Math.min(bird.vy+.31*dt,7.5);bird.y+=bird.vy*dt;bird.rot=Math.max(-.55,Math.min(.95,bird.vy*.09));pipes.forEach(p=>{p.x-=2.7*dt;if(!p.passed&&p.x+65<bird.x){p.passed=true;score++;$('score').textContent=score;$('passed').textContent=score;const newLevel=level();if(score%50===0){$('status').textContent='Level '+newLevel+(newLevel>=3?' 🟡 GOLD PIPES!':' 🚀');chirp(1040,.16);if(vibration&&navigator.vibrate)navigator.vibrate([25,25,45])}else $('status').textContent='Level '+newLevel+' 🪽';chirp(820,.06);if(score>best)$('best').textContent=score}});if(pipes[0].x<-80){pipes.shift();pipes.push(makePipe(pipes[pipes.length-1].x+210))}particles=particles.filter(p=>p.life>0);particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=.035*dt});let hit=bird.y-14<0||bird.y+14>H-ground;for(const p of pipes){if(bird.x+15>p.x-3&&bird.x-15<p.x+65&&(bird.y-12<p.top||bird.y+12>p.top+p.gap)){hit=true;break}}if(hit)gameOver();draw();if(mode==='playing')raf=requestAnimationFrame(loop)}
-function idle(){if(mode==='ready'||mode==='over'){frame+=.4;if(mode==='ready'){bird.y=260+Math.sin(frame*.08)*8;bird.rot=Math.sin(frame*.07)*.06}draw();raf=requestAnimationFrame(idle)}else raf=0}$('playBtn').addEventListener('click',()=>{if(mode!=='playing')start()});c.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;e.preventDefault();if(mode==='playing')flap();else start()});window.addEventListener('keydown',e=>{if(['Space','ArrowUp','KeyW'].includes(e.code)){e.preventDefault();if(mode!=='playing')start();else flap()}if(e.code==='Enter'&&mode!=='playing')start()});$('soundBtn').addEventListener('click',()=>{sound=!sound;$('soundBtn').textContent=sound?'🔊':'🔇';$('soundBtn').setAttribute('aria-pressed',String(sound));if(sound)chirp(600,.06)});$('vibeBtn').addEventListener('click',()=>{vibration=!vibration;$('vibeBtn').textContent=vibration?'📳':'📴';$('vibeBtn').setAttribute('aria-pressed',String(vibration));if(vibration&&navigator.vibrate)navigator.vibrate(15)});$('fullBtn').addEventListener('click',async()=>{try{if(!document.fullscreenElement){await document.documentElement.requestFullscreen();$('fullBtn').textContent='⤢'}else{await document.exitFullscreen();$('fullBtn').textContent='⛶'}}catch{ $('status').textContent='Full screen unavailable' }});document.addEventListener('fullscreenchange',()=>{$('fullBtn').textContent=document.fullscreenElement?'⤢':'⛶'});if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}reset();draw();idle()})();
-</script></body></html>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#8bdbe9">
+  <title>Sky Hop — Flappy Bird</title>
+  <style>
+    :root{--ink:#17344a;--paper:#fff9e9;--coral:#ed8063;--sun:#ffd85d}
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink)}
+    body{min-height:100svh;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 50% 8%,#f8ffdd 0,transparent 38%),linear-gradient(140deg,#82d8e9,#a5e9dc 54%,#f8e9b3)}
+    button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+    .page{width:min(100%,520px);padding:14px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 4px 11px}
+    .brand{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:1000;letter-spacing:-.06em;white-space:nowrap}
+    .bird-logo{display:grid;place-items:center;width:38px;height:38px;border:2px solid var(--ink);border-radius:13px;background:var(--paper);box-shadow:3px 3px 0 var(--ink);font-size:22px;transform:rotate(-5deg)}
+    .tag{padding:8px 11px;border:1px solid #ffffff;border-radius:99px;background:#fff9e9b8;font-size:10px;font-weight:950;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+    .frame{position:relative;overflow:hidden;border:3px solid var(--ink);border-radius:25px;background:#91e1ec;box-shadow:0 10px 0 #15334b24,0 23px 55px #1b55662b;isolation:isolate}
+    canvas{display:block;width:100%;height:auto;aspect-ratio:4/5;touch-action:manipulation}
+    .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(#fff3,transparent 60%,#143d5210);pointer-events:none}
+    .panel{width:min(100%,325px);padding:22px 21px 19px;border:2px solid var(--ink);border-radius:24px;background:#fff9e9f2;box-shadow:7px 7px 0 var(--ink);text-align:center;pointer-events:auto;backdrop-filter:blur(5px);animation:pop .32s cubic-bezier(.2,1.4,.4,1)}
+    @keyframes pop{from{transform:scale(.84) translateY(8px);opacity:0}to{transform:scale(1);opacity:1}}
+    .eyebrow{display:inline-block;padding:6px 11px;border-radius:99px;background:var(--coral);color:white;font-size:10px;font-weight:950;letter-spacing:.13em;text-transform:uppercase}
+    h1{margin:14px 0 10px;font-size:clamp(34px,8vw,44px);font-weight:1000;letter-spacing:-.07em;line-height:.98}
+    h1 span{color:#e77459}
+    .desc{max-width:255px;margin:0 auto 18px;color:#456174;font-size:13px;font-weight:650;line-height:1.5}
+    .primary{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:50px;border:2px solid var(--ink);border-radius:15px;background:var(--sun);box-shadow:0 5px 0 var(--ink);font-size:15px;font-weight:950;transition:transform .12s,box-shadow .12s}
+    .primary:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+    .sub{margin-top:14px;color:#587284;font-size:10px;font-weight:900;letter-spacing:.02em}
+    .hud{position:absolute;top:14px;left:0;right:0;display:flex;justify-content:center;gap:8px;pointer-events:none}
+    .pill{min-width:83px;padding:7px 15px;border:2px solid var(--ink);border-radius:13px;background:#fff9e9e8;box-shadow:3px 3px 0 #15334b50;text-align:center}
+    .pill small{display:block;color:#597383;font-size:9px;font-weight:950;letter-spacing:.12em;text-transform:uppercase}
+    .pill strong{font-size:25px;font-weight:1000;line-height:1.05}
+    .stats{display:flex;gap:9px;margin:12px 0}
+    .stat{flex:1;padding:9px 5px;border:1.5px solid white;border-radius:15px;background:#fff9e9ad;text-align:center}
+    .stat small{display:block;color:#557082;font-size:9px;font-weight:950;letter-spacing:.1em;text-transform:uppercase}
+    .stat strong{display:block;font-size:18px;font-weight:1000;line-height:1.3}
+    .hint{text-align:center;color:#28536a;font-size:11px;font-weight:800;opacity:.9}
+    .hidden{display:none!important}
+    .sound{display:grid;place-items:center;width:37px;height:37px;flex:0 0 37px;border:1px solid white;border-radius:13px;background:#fff9e9b8;font-size:17px}
+    @media(max-height:720px){.page{width:min(100%,420px);padding:6px}.top{margin-bottom:6px}.brand{font-size:18px}.bird-logo{width:32px;height:32px;font-size:18px}.frame{border-radius:19px}.stats{margin:7px 0}.stat{padding:6px 4px}.stat strong{font-size:16px}.hint{font-size:9px}.panel{padding:15px}h1{font-size:33px}.desc{margin-bottom:11px}.primary{min-height:43px}}
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="top">
+      <div class="brand"><span class="bird-logo">🐤</span><span>SKY HOP<span style="color:#ed8063">.</span></span></div>
+      <span class="tag">✦ One more try</span>
+      <button id="soundBtn" class="sound" type="button" aria-label="Toggle sound" title="Toggle sound">🔊</button>
+    </header>
+
+    <section class="frame" id="gameFrame" aria-label="Flappy Bird game">
+      <canvas id="game" width="480" height="600" aria-label="Game area. Tap, click or press Space to fly."></canvas>
+      <div id="hud" class="hud hidden" aria-live="polite">
+        <div class="pill"><small>Score</small><strong id="score">0</strong></div>
+        <div class="pill"><small>Best</small><strong id="best">0</strong></div>
+      </div>
+      <div id="overlay" class="overlay">
+        <div class="panel">
+          <span id="eyebrow" class="eyebrow">✦ The sky is yours</span>
+          <h1 id="title">Ready,<br><span>birdie?</span></h1>
+          <p id="desc" class="desc">A little flap, a little luck. Weave through the pipes and see how far you can fly.</p>
+          <button id="playBtn" class="primary" type="button"><span>▶</span><span id="playText">Let's fly</span></button>
+          <div id="sub" class="sub">TAP · CLICK · SPACE TO FLAP</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="stats">
+      <div class="stat"><small>Personal best</small><strong id="bestStat">0 🏆</strong></div>
+      <div class="stat"><small>Flight status</small><strong id="status">Ready ✨</strong></div>
+      <div class="stat"><small>Pipes passed</small><strong id="passed">0</strong></div>
+    </div>
+    <div class="hint">Press <b>SPACE</b> or <b>↑</b> to flap · Tap anywhere in the game to fly</div>
+  </main>
+
+  <script>
+  (() => {
+    'use strict';
+
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+    const GROUND_H = 64;
+    const PIPE_W = 68;
+    const PIPE_GAP_MIN = 158;
+    const PIPE_GAP_MAX = 178;
+    const PIPE_SPACING = 220;
+    const $ = (id) => document.getElementById(id);
+
+    const ui = {
+      overlay: $('overlay'), hud: $('hud'), score: $('score'), best: $('best'),
+      bestStat: $('bestStat'), passed: $('passed'), status: $('status'),
+      eyebrow: $('eyebrow'), title: $('title'), desc: $('desc'),
+      playBtn: $('playBtn'), playText: $('playText'), sub: $('sub'), soundBtn: $('soundBtn')
+    };
+
+    let state = 'ready'; // ready | playing | gameover
+    let bird;
+    let pipes = [];
+    let particles = [];
+    let score = 0;
+    let best = 0;
+    let elapsed = 0;
+    let lastTimestamp = 0;
+    let soundEnabled = true;
+    let audioContext = null;
+    let animationStarted = false;
+    let shakeTime = 0;
+
+    try { best = Number(localStorage.getItem('skyhop-best') || 0); } catch (_) { best = 0; }
+    ui.best.textContent = String(best);
+    ui.bestStat.textContent = `${best} 🏆`;
+
+    const random = (min, max) => min + Math.random() * (max - min);
+
+    function playTone(frequency, duration = 0.07, type = 'sine') {
+      if (!soundEnabled) return;
+      try {
+        audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.type = type;
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+        gain.gain.setValueAtTime(0.055, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + duration);
+      } catch (_) { /* Audio is optional; the game still plays without it. */ }
+    }
+
+    function makePipe(x) {
+      const gap = random(PIPE_GAP_MIN, PIPE_GAP_MAX);
+      const minTop = 70;
+      const maxTop = H - GROUND_H - gap - 65;
+      return { x, top: random(minTop, maxTop), gap, passed: false };
+    }
+
+    function resetGame() {
+      bird = { x: 125, y: 270, vy: 0, rotation: 0, wingPhase: 0 };
+      pipes = [makePipe(345), makePipe(345 + PIPE_SPACING), makePipe(345 + PIPE_SPACING * 2)];
+      particles = [];
+      score = 0;
+      elapsed = 0;
+      shakeTime = 0;
+      ui.score.textContent = '0';
+      ui.passed.textContent = '0';
+    }
+
+    function spawnFlapParticles() {
+      for (let i = 0; i < 5; i++) {
+        particles.push({
+          x: bird.x - 13, y: bird.y + random(-5, 8),
+          vx: random(-95, -35), vy: random(-45, 45),
+          life: 0.4, maxLife: 0.4, radius: random(2, 4)
+        });
+      }
+    }
+
+    function flap() {
+      if (state !== 'playing') return;
+      bird.vy = -430; // Upward impulse, in canvas pixels per second.
+      bird.wingPhase = 0;
+      spawnFlapParticles();
+      playTone(620, 0.065);
+    }
+
+    function startGame() {
+      resetGame();
+      state = 'playing';
+      ui.overlay.classList.add('hidden');
+      ui.hud.classList.remove('hidden');
+      ui.playText.textContent = 'Fly again';
+      ui.status.textContent = 'Flying 🪽';
+      bird.vy = -430; // The opening input always launches the bird immediately.
+      spawnFlapParticles();
+      playTone(620, 0.065);
+      lastTimestamp = 0;
+      if (!animationStarted) startAnimation();
+    }
+
+    function finishGame() {
+      if (state !== 'playing') return;
+      state = 'gameover';
+      shakeTime = 0.18;
+      playTone(150, 0.23, 'triangle');
+      ui.hud.classList.add('hidden');
+      ui.status.textContent = 'Landed 💫';
+      const isNewRecord = score > best;
+      if (isNewRecord) {
+        best = score;
+        try { localStorage.setItem('skyhop-best', String(best)); } catch (_) { /* Storage can be disabled. */ }
+      }
+      ui.best.textContent = String(best);
+      ui.bestStat.textContent = `${best} 🏆`;
+      ui.eyebrow.textContent = isNewRecord && score > 0 ? '✦ New personal best' : '✦ Flight complete';
+      ui.title.innerHTML = score >= 10 ? 'Sky<br><span>legend!</span>' : score > 0 ? 'Nice<br><span>flying!</span>' : 'Oop—<br><span>bonk!</span>';
+      ui.desc.textContent = score > 0
+        ? `You flew past ${score} pipe${score === 1 ? '' : 's'}. Ready for another little adventure?`
+        : 'Every great flyer starts somewhere. Tap to give it another go!';
+      ui.playText.textContent = 'Fly again';
+      ui.sub.textContent = `YOUR SCORE: ${score} · BEST: ${best}`;
+      ui.overlay.classList.remove('hidden');
+    }
+
+    function drawRoundedRect(x, y, width, height, radius) {
+      if (height <= 0 || width <= 0) return;
+      ctx.beginPath();
+      ctx.roundRect(x, y, width, height, radius);
+      ctx.fill();
+    }
+
+    function drawBackground() {
+      const gradient = ctx.createLinearGradient(0, 0, 0, H);
+      gradient.addColorStop(0, '#8bdbe9');
+      gradient.addColorStop(0.68, '#b7edf0');
+      gradient.addColorStop(1, '#e3f5c9');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, W, H);
+
+      // Sun
+      ctx.fillStyle = '#fff8d7';
+      ctx.beginPath(); ctx.arc(370, 100, 35, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#fffde7';
+      ctx.beginPath(); ctx.arc(359, 90, 19, 0, Math.PI * 2); ctx.fill();
+
+      // Slowly drifting clouds make the scene look alive before the first flap too.
+      for (let i = 0; i < 4; i++) {
+        const rawX = (i * 151 - elapsed * 18) % (W + 130);
+        const x = (rawX + W + 130) % (W + 130) - 55;
+        const y = 92 + (i % 3) * 75;
+        ctx.fillStyle = '#fff9e9b8';
+        ctx.beginPath();
+        ctx.ellipse(x, y, 28, 10, 0, 0, Math.PI * 2);
+        ctx.ellipse(x + 20, y - 7, 23, 15, 0, 0, Math.PI * 2);
+        ctx.ellipse(x + 43, y, 29, 10, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.fillStyle = '#80d1ae';
+      ctx.beginPath(); ctx.moveTo(0, H - GROUND_H - 58);
+      for (let x = 0; x <= W; x += 8) ctx.lineTo(x, H - GROUND_H - 45 + Math.sin((x + elapsed * 28) / 57) * 18 + Math.sin(x / 29) * 8);
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+
+      ctx.fillStyle = '#59bd9a';
+      ctx.beginPath(); ctx.moveTo(0, H - GROUND_H - 27);
+      for (let x = 0; x <= W; x += 8) ctx.lineTo(x, H - GROUND_H - 10 + Math.sin((x - elapsed * 34) / 43) * 14 + Math.sin(x / 22) * 7);
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+    }
+
+    function drawPipe(pipe) {
+      const bottomY = pipe.top + pipe.gap;
+      // Upper pipe body and lip
+      ctx.fillStyle = '#218c68';
+      drawRoundedRect(pipe.x + 5, 0, PIPE_W - 10, pipe.top - 7, 7);
+      ctx.fillStyle = '#55ce87';
+      ctx.fillRect(pipe.x + 13, 0, 10, Math.max(0, pipe.top - 7));
+      ctx.fillStyle = '#279d70';
+      drawRoundedRect(pipe.x, pipe.top - 18, PIPE_W, 25, 7);
+      ctx.fillStyle = '#54d28d';
+      ctx.fillRect(pipe.x + 9, pipe.top - 14, 10, 18);
+
+      // Lower pipe body and lip
+      ctx.fillStyle = '#218c68';
+      drawRoundedRect(pipe.x + 5, bottomY, PIPE_W - 10, H - GROUND_H - bottomY, 7);
+      ctx.fillStyle = '#55ce87';
+      ctx.fillRect(pipe.x + 13, bottomY + 2, 10, Math.max(0, H - GROUND_H - bottomY - 2));
+      ctx.fillStyle = '#279d70';
+      drawRoundedRect(pipe.x - 5, bottomY - 2, PIPE_W + 10, 25, 7);
+      ctx.fillStyle = '#54d28d';
+      ctx.fillRect(pipe.x + 5, bottomY + 2, 10, 17);
+    }
+
+    function drawGround() {
+      ctx.fillStyle = '#f2d17a';
+      ctx.fillRect(0, H - GROUND_H, W, GROUND_H);
+      ctx.fillStyle = '#b5dc79';
+      ctx.fillRect(0, H - GROUND_H, W, 12);
+      const offset = (elapsed * 100) % 30;
+      for (let x = -offset; x < W; x += 30) {
+        ctx.fillStyle = '#d9b35d';
+        ctx.beginPath();
+        ctx.moveTo(x, H - GROUND_H + 12);
+        ctx.lineTo(x + 13, H - GROUND_H + 12);
+        ctx.lineTo(x + 3, H - GROUND_H + 19);
+        ctx.closePath(); ctx.fill();
+      }
+      ctx.fillStyle = '#a57b46';
+      ctx.fillRect(0, H - 8, W, 8);
+    }
+
+    function drawBird() {
+      ctx.save();
+      ctx.translate(bird.x, bird.y);
+      ctx.rotate(bird.rotation);
+      // Outline/body
+      ctx.fillStyle = '#17344a';
+      ctx.beginPath(); ctx.ellipse(0, 1, 21, 17, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#ffca4c';
+      ctx.beginPath(); ctx.ellipse(-1, -2, 18, 14, 0, 0, Math.PI * 2); ctx.fill();
+      // Wing visibly flaps throughout the flight
+      const wingLift = Math.sin(bird.wingPhase) * 4;
+      ctx.fillStyle = '#f2a928';
+      ctx.beginPath(); ctx.ellipse(-7, 4 + wingLift, 9, 5, -0.18, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#17344a'; ctx.lineWidth = 1.7;
+      ctx.beginPath(); ctx.ellipse(-7, 4 + wingLift, 9, 5, -0.18, 0, Math.PI * 2); ctx.stroke();
+      // Eye and beak
+      ctx.fillStyle = '#fff9e8';
+      ctx.beginPath(); ctx.ellipse(9, -7, 8, 9, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#18344a';
+      ctx.beginPath(); ctx.arc(12, -7, 3.2, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#ff8065';
+      ctx.beginPath(); ctx.moveTo(15, 1); ctx.lineTo(29, 5); ctx.lineTo(15, 9); ctx.closePath(); ctx.fill();
+      ctx.restore();
+    }
+
+    function drawParticles() {
+      for (const p of particles) {
+        ctx.globalAlpha = Math.max(0, p.life / p.maxLife);
+        ctx.fillStyle = '#fff9e8';
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function render() {
+      ctx.save();
+      if (shakeTime > 0) {
+        const amount = shakeTime * 22;
+        ctx.translate(random(-amount, amount), random(-amount, amount));
+      }
+      drawBackground();
+      for (const pipe of pipes) drawPipe(pipe);
+      drawParticles();
+      drawGround();
+      drawBird();
+      ctx.restore();
+    }
+
+    function update(dt) {
+      elapsed += dt;
+      // Decorative idle bob means the bird is visibly alive before starting.
+      if (state === 'ready') {
+        bird.y = 270 + Math.sin(elapsed * 3.2) * 9;
+        bird.rotation = Math.sin(elapsed * 2.2) * 0.045;
+        bird.wingPhase += dt * 9;
+      } else if (state === 'playing') {
+        // Time-based physics keeps movement consistent on high- and low-refresh screens.
+        bird.vy = Math.min(bird.vy + 1250 * dt, 560);
+        bird.y += bird.vy * dt;
+        bird.rotation = Math.max(-0.52, Math.min(0.95, bird.vy / 610));
+        bird.wingPhase += dt * 18;
+
+        // Pipes move continuously from right to left while the run is active.
+        const pipeSpeed = 170;
+        for (const pipe of pipes) {
+          pipe.x -= pipeSpeed * dt;
+          if (!pipe.passed && pipe.x + PIPE_W < bird.x) {
+            pipe.passed = true;
+            score += 1;
+            ui.score.textContent = String(score);
+            ui.passed.textContent = String(score);
+            playTone(820, 0.055);
+            if (score > best) ui.best.textContent = String(score);
+          }
+        }
+
+        if (pipes.length && pipes[0].x + PIPE_W < -10) {
+          pipes.shift();
+          pipes.push(makePipe(pipes[pipes.length - 1].x + PIPE_SPACING));
+        }
+
+        // Circle-ish bird collision box, separated from the drawing dimensions.
+        const radiusX = 15;
+        const radiusY = 13;
+        let collided = bird.y - radiusY <= 0 || bird.y + radiusY >= H - GROUND_H;
+        for (const pipe of pipes) {
+          const overlapsX = bird.x + radiusX > pipe.x && bird.x - radiusX < pipe.x + PIPE_W;
+          const outsideGap = bird.y - radiusY < pipe.top || bird.y + radiusY > pipe.top + pipe.gap;
+          if (overlapsX && outsideGap) { collided = true; break; }
+        }
+        if (collided) finishGame();
+      }
+
+      for (const p of particles) {
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.life -= dt;
+      }
+      particles = particles.filter(p => p.life > 0);
+      shakeTime = Math.max(0, shakeTime - dt);
+    }
+
+    function animationLoop(timestamp) {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const dt = Math.min((timestamp - lastTimestamp) / 1000, 0.033);
+      lastTimestamp = timestamp;
+      update(Math.max(0, dt));
+      render();
+      requestAnimationFrame(animationLoop);
+    }
+
+    function startAnimation() {
+      if (animationStarted) return;
+      animationStarted = true;
+      lastTimestamp = 0;
+      requestAnimationFrame(animationLoop);
+    }
+
+    function handleGameInput(event) {
+      if (event && event.target && event.target.closest && event.target.closest('button')) return;
+      if (event && event.cancelable) event.preventDefault();
+      if (state === 'playing') flap();
+      else startGame();
+    }
+
+    ui.playBtn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      startGame();
+    });
+
+    // Attach input to the whole frame so taps work even when the translucent overlay is visible.
+    $('gameFrame').addEventListener('pointerdown', handleGameInput, { passive: false });
+
+    window.addEventListener('keydown', (event) => {
+      if (['Space', 'ArrowUp', 'KeyW'].includes(event.code)) {
+        event.preventDefault();
+        if (state === 'playing') flap();
+        else startGame();
+      } else if (event.code === 'Enter' && state !== 'playing') {
+        startGame();
+      }
+    });
+
+    ui.soundBtn.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      ui.soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
+      ui.soundBtn.setAttribute('aria-label', soundEnabled ? 'Mute sound' : 'Enable sound');
+      if (soundEnabled) playTone(600, 0.06);
+    });
+
+    resetGame();
+    startAnimation();
+  })();
+  </script>
+</body>
+</html>
